@@ -4,6 +4,25 @@ import spellchecker
 import logging
 import numpy as np
 import json
+import random
+from datetime import datetime
+
+with open('words.json', 'r') as f:
+    word_list = json.load(f)
+
+def generate_word_pair():
+    words_and_time = [
+        random.choice(word_list),
+        random.choice(word_list),
+        datetime.now()
+    ]
+
+    if words_and_time[0] == words_and_time[1]:
+        words_and_time = generate_word_pair()
+
+    return words_and_time
+
+words_and_time = generate_word_pair()
 
 def levenshtein_distance(token1, token2):
     # https://blog.paperspace.com/measuring-text-similarity-using-levenshtein-distance/
@@ -42,9 +61,6 @@ except KeyError:
     logging.warning('$SESSION_KEY not in environment')
     app.secret_key = 'BAD_SECRET_KEY_DEV_ONLY'
 
-start_word = 'cooks'
-target_word = 'clock'
-
 def check_word(word, prev_word):
     checker = spellchecker.SpellChecker()
     return {
@@ -56,6 +72,10 @@ def check_word(word, prev_word):
 @app.route('/', methods = ['GET', 'POST'])
 def index():
     if request.method == 'GET':
+        time_since_word = datetime.now() - words_and_time[2]
+        if time_since_word.days >= 1:
+            words_and_time[0:2] = generate_word_pair()
+
         return render_template('indel.html')
 
     elif request.method == 'POST':
@@ -68,5 +88,5 @@ def index():
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'setup':
             return json.dumps(
-                {'start_word': start_word, 'target_word': target_word}
+                {'start_word': words_and_time[0], 'target_word': words_and_time[1]}
             ), 200, {'ContentType': 'application/json'}
