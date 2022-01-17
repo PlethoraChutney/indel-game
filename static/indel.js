@@ -53,13 +53,24 @@ async function check_word(word, prev_word) {
     });
 
     response.json().then((value) => {
-        console.log(value);
+        if (value === 'True') {
+            vm.previousWords.push(word);
+            vm.currentWord = [];
+        }
     });
+}
+
+function handleDelete() {
+    if (vm.currentWord.length > 0) {
+        vm.currentWord.pop();
+    } else if (vm.previousWords.length > 1) {
+        vm.currentWord = vm.previousWords.pop().split('');
+    }
 }
 
 function read_key(keypress) {
     if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
-        vm.$data.currentWord.pop();
+        handleDelete();
     } else if (keypress.toUpperCase() === 'ENTER') {
         word = vm.$data.currentWord.join('');
         prev_words = vm.$data.previousWords;
