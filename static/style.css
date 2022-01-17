@@ -78,6 +78,10 @@ body {
         display: none;
         visibility: hidden;
     }
+
+    .winner {
+        font-size: 36pt;
+    }
 }
 
 #indel-app,
