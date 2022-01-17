@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #FFFD8F;
+}
+
+.horiz-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.vert-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#keyboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    user-select: none;
+    height: max-content;
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+#keyboard > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.keyboard-key {
+    padding: 1rem;
+    margin: 0.5rem;
+    border: 1px solid black;
+    line-height: 1rem;
+    min-width: 0.75rem;
+    text-align: center;
+    font-family: sans-serif;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .keyboard-key {
+        font-size: 10pt;
+        min-width: 4vw;
+        padding: 2vw;
+        margin: 0.5vw;
+    }
+}
+
+#current-word {
+    text-align: center;
+    min-height: 2.5rem;
+}
+
+#indel-app {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+#previous-guesses {
+    height: 100%;
+}
+
+h1 {
+    font-size: 36pt;
+}

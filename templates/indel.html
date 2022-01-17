@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'style.css')}}">
+    <title>Indel</title>
+</head>
+<body>
+    <!-- [[ ]] is for Vue templating -->
+    <div class="horiz-center" style="height: 100%;">
+        <div id="indel-app">
+            <div id="previous-guesses" class="vert-center">
+                <h1 id="current-word">[[ currentWord.join('') ]]</h1>
+            </div>
+            
+            <div id="keyboard"></div>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="{{url_for('static', filename = 'indel.js')}}"></script>
+</html>
