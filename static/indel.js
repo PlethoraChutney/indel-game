@@ -13,7 +13,7 @@ for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>']) {
         }
         const newKey = document.createElement('div');
         newKey.setAttribute('id', 'key-' + char);
-        newKey.classList.add('keyboard-key', 'unused');
+        newKey.classList.add('keyboard-key');
 
         const letterNode = document.createTextNode(char);
         newKey.appendChild(letterNode);
