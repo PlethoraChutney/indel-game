@@ -1,4 +1,5 @@
 const indel_url = '/';
+let keyboardLock = false;
 
 // create keyboard
 
@@ -57,6 +58,11 @@ async function check_word(word, prev_word) {
                 {scrollTop: $('#previous-guesses')[0].scrollHeight}, 'slow'
             );
             vm.currentWord = [];
+            window.setTimeout(() => {
+                if (word === vm.targetWord) {
+                    puzzleComplete();
+                }
+            }, 250);
         } else {
             $('#current-word')
                 .addClass('bad-guess');
@@ -104,6 +110,17 @@ function errorMessage(answerObject){
     }, 1000);
 }
 
+function puzzleComplete() {
+    console.log('Puzzle complete!');
+    keyboardLock = true;
+    $('h1, hr, #keyboard, #previous-guesses')
+        .not('#target-word, #game-title')
+        .fadeOut(2500, () => {
+            $('#previous-guesses').addClass('hidden');
+            $('#target-word').addClass('winner');
+        });
+}
+
 function handleDelete() {
     if (vm.currentWord.length > 0) {
         vm.currentWord.pop();
@@ -113,6 +130,10 @@ function handleDelete() {
 }
 
 function read_key(keypress) {
+    if (keyboardLock) {
+        return true;
+    }
+
     if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
         handleDelete();
     } else if (keypress.toUpperCase() === 'ENTER') {

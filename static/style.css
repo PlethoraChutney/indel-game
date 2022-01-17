@@ -80,7 +80,8 @@ body {
     }
 }
 
-#indel-app {
+#indel-app,
+#app-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -88,7 +89,7 @@ body {
     height: 100%;
 }
 
-#previous-guesses {
+#previous-guesses, #indel-app {
     height: 100%;
     width: 100%;
     text-align: center;
@@ -163,4 +164,9 @@ h1 {
 
 #error-modal-content.visible {
     animation: fadein 1000ms;
+}
+
+.winner {
+    margin: auto;
+    font-size: 128pt;
 }
