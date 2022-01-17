@@ -1,3 +1,4 @@
+const indel_url = '/';
 currentWord = [];
 
 // create keyboard
@@ -32,11 +33,35 @@ $('.keyboard-key').on('tap', function() {
     read_key(keyPressed);
 });
 
+async function check_word(word) {
+    const response = await fetch(indel_url, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({
+            "action": "check_distance",
+            "word": word
+        })
+    });
+
+    response.json().then((value) => {
+        console.log(value);
+    });
+}
+
 function read_key(keypress) {
     if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
         vm.$data.currentWord.pop();
     } else if (keypress.toUpperCase() === 'ENTER') {
-        console.log(vm.$data.currentWord.join(''))
+        word = vm.$data.currentWord.join('')
+        console.log(word);
+        check_word(word);
     } else {
         vm.$data.currentWord.push(keypress.toUpperCase());
     }
