@@ -23,6 +23,16 @@ body {
     justify-content: flex-start;
 }
 
+#game-title {
+    transform: rotate(-90deg);
+    position: absolute;
+    left: -2.5em;
+    top: 30%;
+    text-align: center;
+    font-size: 72pt;
+    letter-spacing: 5rem;
+}
+
 #keyboard {
     display: flex;
     flex-direction: column;
@@ -61,6 +71,11 @@ body {
         min-width: 4vw;
         padding: 2vw;
         margin: 0.5vw;
+    }
+
+    #game-title {
+        display: none;
+        visibility: hidden;
     }
 }
 
