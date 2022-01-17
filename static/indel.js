@@ -51,14 +51,57 @@ async function check_word(word, prev_word) {
     });
 
     response.json().then((value) => {
-        if (value === 'True') {
+        if (value.word === 'True' && value.distance === 'True') {
             vm.previousWords.push(word);
             $('#previous-guesses').animate(
                 {scrollTop: $('#previous-guesses')[0].scrollHeight}, 'slow'
             );
             vm.currentWord = [];
+        } else {
+            $('#current-word')
+                .addClass('bad-guess');
+            window.setTimeout(() => {
+                $('#current-word')
+                    .removeClass('bad-guess');
+            }, 500);
+
+            errorMessage(value);
         }
     });
+}
+
+function errorMessage(answerObject){
+    messageText = []
+    if (answerObject.word === 'False') {
+        messageText.push('Not a word');
+    }
+
+    if (answerObject.word === 'False' && answerObject.distance === 'False') {
+        messageText.push(' and t');
+    } else if (answerObject.word === 'True') {
+        messageText.push('T');
+    } else {
+        messageText.push('.');
+    }
+
+    if (answerObject.distance === 'False') {
+        messageText.push('oo many changes.');
+    }
+
+    $('#error-modal-content')
+        .text(messageText.join(''))
+        .addClass('visible');
+
+    window.setTimeout(() => {
+        $('#error-modal-content')
+            .removeClass('visible');
+    }, 1000);
+    
+    $('#error-modal').removeClass('hidden');
+
+    window.setTimeout(() => {
+        $('#error-modal').addClass('hidden');
+    }, 1000);
 }
 
 function handleDelete() {

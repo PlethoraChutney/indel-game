@@ -44,7 +44,11 @@ target_word = 'clock'
 
 def check_word(word, prev_word):
     checker = spellchecker.SpellChecker()
-    return len(checker.unknown([word])) == 0 and levenshtein_distance(word, prev_word) <= 1
+    return {
+        'word': str(len(checker.unknown([word])) == 0),
+        'distance': str(levenshtein_distance(word, prev_word) <= 1)
+    }
+
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
@@ -57,7 +61,7 @@ def index():
         # check distance
         if req_json['action'] == 'check_word':
             return json.dumps(
-                str(check_word(req_json['word'], req_json['prev_word']))
+                check_word(req_json['word'], req_json['prev_word'])
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'setup':
             return json.dumps(
