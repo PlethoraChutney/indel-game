@@ -13,8 +13,9 @@
         <div id="indel-app">
             <div id="previous-guesses" class="vert-center">
                 <h1 v-for="word in previousWords"> [[word]] </h1>
-                <h1 id="current-word">[[ currentWord.join('') ]]</h1>
+                <h1 id="current-word">[[ currentWord.join('') + '|' ]]</h1>
             </div>
+            <h1 id="target-word"> [[targetWord]] </h1>
             
             <div id="keyboard"></div>
         </div>

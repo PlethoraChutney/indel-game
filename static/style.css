@@ -68,6 +68,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     height: 100%;
 }
 
@@ -75,8 +76,16 @@ body {
     height: 100%;
     text-align: center;
     min-height: 2.5rem;
+    overflow-y: scroll;
+    overflow-x: visible;
+    scrollbar-width: none;
+}
+
+#previous-guesses::-webkit-scrollbar {
+    display: none;
 }
 
 h1 {
     font-size: 36pt;
+    margin-top: 0;
 }

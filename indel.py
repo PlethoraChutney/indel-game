@@ -39,7 +39,8 @@ except KeyError:
     logging.warning('$SESSION_KEY not in environment')
     app.secret_key = 'BAD_SECRET_KEY_DEV_ONLY'
 
-target_word = 'cooks'
+start_word = 'cooks'
+target_word = 'clock'
 
 def check_word(word, prev_word):
     checker = spellchecker.SpellChecker()
@@ -60,5 +61,5 @@ def index():
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'setup':
             return json.dumps(
-                {'start_word': target_word}
+                {'start_word': start_word, 'target_word': target_word}
             ), 200, {'ContentType': 'application/json'}
