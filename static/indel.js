@@ -132,7 +132,7 @@ $(document).keydown(function(e) {
         read_key('backspace');
     } else if (e.keyCode == 13) {
         read_key('enter');
-    } else if (e.keyCode >= 65 && e.keyCode <= 90) {
+    } else if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 32) {
         read_key(String.fromCharCode(e.which));
     } else {
         e.preventDefault();

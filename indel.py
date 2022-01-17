@@ -10,6 +10,9 @@ def levenshtein_distance(token1, token2):
     # if this is slow it could definitely be vectorized
     #
     # it's quite fast
+
+    token1 = token1.replace(' ', '')
+    token2 = token2.replace(' ', '')
     
     distances = np.zeros((len(token1) + 1, len(token2) + 1))
     distances[:,0] = np.arange(len(token1) + 1)
@@ -45,7 +48,7 @@ target_word = 'clock'
 def check_word(word, prev_word):
     checker = spellchecker.SpellChecker()
     return {
-        'word': str(len(checker.unknown([word])) == 0),
+        'word': str(len(checker.unknown(word.split(' '))) == 0),
         'distance': str(levenshtein_distance(word, prev_word) <= 1)
     }
 
