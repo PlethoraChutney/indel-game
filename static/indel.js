@@ -1,5 +1,6 @@
 const indel_url = '/';
 currentWord = [];
+previousWords = [];
 
 // create keyboard
 
@@ -33,7 +34,7 @@ $('.keyboard-key').on('tap', function() {
     read_key(keyPressed);
 });
 
-async function check_word(word) {
+async function check_word(word, prev_word) {
     const response = await fetch(indel_url, {
         method: 'POST',
         mode: 'cors',
@@ -45,8 +46,9 @@ async function check_word(word) {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify({
-            "action": "check_distance",
-            "word": word
+            "action": "check_word",
+            "word": word,
+            "prev_word": prev_word
         })
     });
 
@@ -59,9 +61,10 @@ function read_key(keypress) {
     if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
         vm.$data.currentWord.pop();
     } else if (keypress.toUpperCase() === 'ENTER') {
-        word = vm.$data.currentWord.join('')
-        console.log(word);
-        check_word(word);
+        word = vm.$data.currentWord.join('');
+        prev_words = vm.$data.previousWords;
+        prev_word = prev_words[prev_words.length - 1];
+        check_word(word, prev_word);
     } else {
         vm.$data.currentWord.push(keypress.toUpperCase());
     }
@@ -84,7 +87,8 @@ $(document).keydown(function(e) {
 const IndelApp = {
     data() {
         return {
-            currentWord: currentWord
+            currentWord: currentWord,
+            previousWords: previousWords
         }
     },
     compilerOptions: {
@@ -93,3 +97,27 @@ const IndelApp = {
 }
 
 const vm = Vue.createApp(IndelApp).mount('#indel-app');
+
+async function setup() {
+    const response = await fetch(indel_url, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({
+            "action": "setup"
+        })
+    });
+
+    response.json().then((value) => {
+        console.log(value.start_word);
+        vm.previousWords.push(value.start_word.toLocaleUpperCase());
+    });
+}
+
+setup();

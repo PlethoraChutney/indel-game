@@ -64,11 +64,6 @@ body {
     }
 }
 
-#current-word {
-    text-align: center;
-    min-height: 2.5rem;
-}
-
 #indel-app {
     display: flex;
     flex-direction: column;
@@ -78,6 +73,8 @@ body {
 
 #previous-guesses {
     height: 100%;
+    text-align: center;
+    min-height: 2.5rem;
 }
 
 h1 {
