@@ -80,7 +80,7 @@ body {
     }
 
     .winner {
-        font-size: 36pt;
+        font-size: 24pt;
     }
 }
 
@@ -172,5 +172,5 @@ h1 {
 
 .winner {
     margin: auto;
-    font-size: 98pt;
+    font-size: 72pt;
 }
