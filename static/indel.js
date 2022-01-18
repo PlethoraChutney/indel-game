@@ -112,8 +112,27 @@ function errorMessage(answerObject){
     }, 1000);
 }
 
+function makeEmojiChain(wordList) {
+    let emojiList = ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+    let emojiStrings = [];
+    
+    for (let i = 0; i < wordList.length; i++) {
+        let words = wordList[i].split(' ');
+        let wordEmoji = [];
+        for (word of words) {
+            if (word.length > 10) {
+                wordEmoji.push(word.length);
+            } else {
+                wordEmoji.push(emojiList[word.length]);
+            }
+        }
+        emojiStrings.push(wordEmoji.join(' '));
+    }
+
+    return emojiStrings.join(' → ');
+}
+
 function puzzleComplete() {
-    console.log('Puzzle complete!');
     keyboardLock = true;
     $('h1, hr, #keyboard, #previous-guesses')
         .not('#target-word, #game-title, #num-guesses')
@@ -124,6 +143,14 @@ function puzzleComplete() {
         $('#target-word').addClass('winner');
         $('#num-guesses').removeClass('hidden');
     }, 2500);
+
+    window.setTimeout(() => {
+        let emojiInterior = makeEmojiChain(vm.previousWords.slice(1, vm.previousWords.length-2));
+
+        $('#emoji-chain')
+            .text(vm.previousWords[0] + ' → ' + emojiInterior + ' → ' + vm.previousWords[vm.previousWords.length -1])
+            .removeClass('hidden');
+    }, 2500)
 }
 
 function handleDelete() {

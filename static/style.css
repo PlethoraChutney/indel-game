@@ -237,6 +237,11 @@ h1 {
     cursor: pointer;
 }
 
+#emoji-chain {
+    width: 80%;
+    margin-bottom: 50px;
+}
+
 @media (pointer: coarse) {
     #keyboard {
         display: flex;
