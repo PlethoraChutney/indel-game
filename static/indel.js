@@ -114,10 +114,11 @@ function puzzleComplete() {
     console.log('Puzzle complete!');
     keyboardLock = true;
     $('h1, hr, #keyboard, #previous-guesses')
-        .not('#target-word, #game-title')
+        .not('#target-word, #game-title, #num-guesses')
         .fadeOut(2500, () => {
             $('#previous-guesses').addClass('hidden');
             $('#target-word').addClass('winner');
+            $('#num-guesses').removeClass('hidden');
         });
 }
 
