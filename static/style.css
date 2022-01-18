@@ -68,8 +68,27 @@ body {
     justify-content: center;
 }
 
+<<<<<<< HEAD
 #key-Space {
     width: 200px;
+=======
+@media (max-width: 900px) {
+    .keyboard-key {
+        font-size: 10pt;
+        min-width: 4vw;
+        padding: 2vw;
+        margin: 0.5vw;
+    }
+
+    #game-title {
+        display: none;
+        visibility: hidden;
+    }
+
+    .winner {
+        font-size: 24pt;
+    }
+>>>>>>> ea1100e0bfc2b1f92d7071cc85180894103e634b
 }
 
 #indel-app,
@@ -221,7 +240,7 @@ h1 {
 
 .winner {
     margin: auto;
-    font-size: 98pt;
+    font-size: 72pt;
 }
 
 #help-launcher {
