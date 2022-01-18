@@ -280,3 +280,11 @@ h1 {
         margin-bottom: 0;
     }
 }
+
+@media screen and (prefers-color-scheme: dark) {
+    body,
+    html {
+        background-color: #121212;
+        color: #CFCE97;
+    }
+}

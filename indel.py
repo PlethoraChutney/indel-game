@@ -75,7 +75,7 @@ def index():
         if datetime.now().day != words_and_time[2]:
             words_and_time[0:2] = generate_word_pair()
 
-        return render_template('indel.html')
+        return render_template('indel.html', night_theme = request.args.get('theme') == 'dark')
 
     elif request.method == 'POST':
         req_json = request.get_json()
