@@ -4,13 +4,15 @@ let keyboardLock = false;
 // create keyboard
 
 const keyboardDiv = document.getElementById('keyboard');
-for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>']) {
+for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>', ' ']) {
     const newRow = document.createElement('div')
     for (let char of row) {
         if (char === '<') {
             char = 'Enter';
         } else if (char === '>') {
             char = 'Del';
+        } else if (char === ' ') {
+            char = 'Space';
         }
         const newKey = document.createElement('div');
         newKey.setAttribute('id', 'key-' + char);
@@ -137,6 +139,10 @@ function read_key(keypress) {
         return true;
     }
 
+    if (keypress === 'Space') {
+        keypress = ' ';
+    }
+
     if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
         handleDelete();
     } else if (keypress.toUpperCase() === 'ENTER') {
@@ -158,6 +164,8 @@ $(document).keydown(function(e) {
         read_key('enter');
     } else if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 32) {
         read_key(String.fromCharCode(e.which));
+    } else if (e.keyCode === 27) {
+        $('#help-modal').addClass('hidden');
     } else {
         e.preventDefault();
     }
@@ -202,3 +210,20 @@ setup();
 
 const vm = Vue.createApp(IndelApp).mount('#indel-app');
 
+// Help modal
+$('#help-launcher').click(() => {
+    $('#help-modal')
+        .removeClass('hidden');
+})
+
+$('#help-modal-close').click(() => {
+    $('#help-modal').addClass('hidden');
+})
+
+$('#help-modal-content').click(function(e) {
+    e.stopPropagation();
+})
+
+$('#help-modal').click(() => {
+    $('#help-modal').addClass('hidden');
+})

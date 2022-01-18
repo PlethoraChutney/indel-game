@@ -11,9 +11,53 @@
     <div id="error-modal" class="modal hidden">
         <div id="error-modal-content" class="error-message"></div>
     </div>
+    <div id="help-modal" class="modal hidden">
+        <div id="help-modal-content" class="help-message">
+            <p id="help-modal-close" style="width: 20px; margin: 0;">&times;</p>
+            <h2>INDEL</h2>
+            <p class="definition">
+                (noun) A genetic mutation caused by the
+                <span class="insertion">insertion</span> or
+                <span class="deletion">deletion</span> of a segment of DNA into an organism's genome
+            </p>
+            <p>
+                The goal of INDEL is to get from the starting word
+                to the goal word.
+            </p>
+            <p>
+                Submit new words which have either an <span class="insertion">insertion</span>,
+                a <span class="deletion">deletion</span>,
+                or a <span class="mutation">mutation</span>.
+            </p>
+            <p class="example">
+                <span class="insertion">Insertion</span>: SIGH &rarr; SIGHT
+            </p>
+            <p class="example">
+                <span class="deletion">Deletion</span>: BRIM &rarr; RIM
+            </p>
+            <p class="example">
+                <span class="mutation">Mutation</span>: BELT &rarr; BEET
+            </p>
+            <p>
+                You may also split or combine words for free by adding or removing a space. This
+                split or combination can be combined with a mutation.
+            </p>
+            <p class="example">
+                Split and <span class="insertion">insert</span>: MELON &rarr; <span class="big-space">ME LONG</span>
+            </p>
+            <p class="example">
+                Combine and <span class="mutation">mutate</span>: <span class="big-space">CAT BODE</span> &rarr; CATHODE
+            </p>
+            <p>
+                Feel free to try words and make mistakes. Backspace can be used to undo
+                prior guesses without penalty.
+            </p>
+        </div>
+    </div>
     <!-- [[ ]] is for Vue templating -->
     <div id="whole-page" class="vert-center" style="height: 100%;">
         <h1 id="game-title">INDEL</h1>
+        <h1 id="help-launcher">?</h1>
         <div id="app-wrapper" class="vert-center">
             <div id="indel-app">
                 <div id="previous-guesses" class="vert-center">

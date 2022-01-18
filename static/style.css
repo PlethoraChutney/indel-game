@@ -68,30 +68,8 @@ body {
     justify-content: center;
 }
 
-@media (pointer: coarse) {
-    #keyboard {
-        display: flex;
-        visibility: visible;
-    }
-}
-
-@media (max-width: 900px) {
-    .keyboard-key {
-        font-size: 10pt;
-        min-width: 4vw;
-        padding: 2vw;
-        margin: 0.5vw;
-    }
-
-    #game-title {
-        display: none;
-        visibility: hidden;
-    }
-
-    .winner {
-        font-size: 24pt;
-        max-width: 900px;
-    }
+#key-Space {
+    width: 200px;
 }
 
 #indel-app,
@@ -125,6 +103,7 @@ body {
 h1 {
     font-size: 36pt;
     margin-top: 0;
+    word-spacing: 1rem;
 }
 
 @keyframes shake {
@@ -169,6 +148,66 @@ h1 {
     opacity: 0;
 }
 
+#help-modal {
+    background-color: rgba(0,0,0,0.6);
+}
+
+#help-modal-close {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    font-size: 28pt;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#help-modal-content {
+    position: relative;
+    margin: 10% auto;
+    max-width: 800px;
+    width: 80%;
+    background-color: #121212;
+    color: #CFCE97;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#help-modal-content p {
+    width: 70%;
+}
+
+.example {
+    text-align: center;
+    font-style: italic;
+}
+
+.big-space {
+    word-spacing: 75%;
+}
+
+#help-modal-content p.definition {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 10pt;
+    text-align: center;
+}
+
+.mutation {
+    color: #94B59C;
+}
+
+.insertion {
+    color: #707AB5;
+}
+
+.deletion {
+    color: #B5797F;
+}
+
 @keyframes fadein {
     0% {opacity: 0;}
     10% {opacity: 1;}
@@ -183,4 +222,48 @@ h1 {
 .winner {
     margin: auto;
     font-size: 98pt;
+}
+
+#help-launcher {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    color: #999;
+    font-size: 28pt;
+}
+
+#help-launcher:hover {
+    color: #666;
+    cursor: pointer;
+}
+
+@media (pointer: coarse) {
+    #keyboard {
+        display: flex;
+        visibility: visible;
+    }
+}
+
+@media (max-width: 900px) {
+    .keyboard-key {
+        font-size: 10pt;
+        min-width: 4vw;
+        padding: 2vw;
+        margin: 0.5vw;
+    }
+
+    #game-title {
+        display: none;
+        visibility: hidden;
+    }
+
+    .winner {
+        font-size: 24pt;
+        max-width: 900px;
+    }
+
+    #help-modal-content p {
+        width: 100%;
+        margin-bottom: 0;
+    }
 }

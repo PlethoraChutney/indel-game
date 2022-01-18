@@ -14,7 +14,7 @@ def generate_word_pair():
     words_and_time = [
         random.choice(word_list),
         random.choice(word_list),
-        datetime.now()
+        datetime.now().day
     ]
 
     if words_and_time[0] == words_and_time[1]:
@@ -72,8 +72,7 @@ def check_word(word, prev_word):
 @app.route('/', methods = ['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        time_since_word = datetime.now() - words_and_time[2]
-        if time_since_word.days >= 1:
+        if datetime.now().day != words_and_time[2]:
             words_and_time[0:2] = generate_word_pair()
 
         return render_template('indel.html')
