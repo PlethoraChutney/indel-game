@@ -145,7 +145,7 @@ function puzzleComplete() {
     }, 2500);
 
     window.setTimeout(() => {
-        let emojiInterior = makeEmojiChain(vm.previousWords.slice(1, vm.previousWords.length-2));
+        let emojiInterior = makeEmojiChain(vm.previousWords.slice(1, vm.previousWords.length-1));
 
         $('#emoji-chain')
             .text(vm.previousWords[0] + ' → ' + emojiInterior + ' → ' + vm.previousWords[vm.previousWords.length -1])
