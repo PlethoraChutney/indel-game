@@ -163,8 +163,9 @@ h1 {
 
 #help-modal-content {
     position: relative;
-    margin: 10% auto;
+    margin: 5% auto;
     max-width: 800px;
+    max-height: 85%;
     width: 80%;
     background-color: #121212;
     color: #CFCE97;
@@ -174,6 +175,13 @@ h1 {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+#help-modal-content::-webkit-scrollbar {
+    display: none;
 }
 
 #help-modal-content p {
