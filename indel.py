@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request
 import os
 import spellchecker
 import logging
@@ -23,6 +23,8 @@ def generate_word_pair():
     return words_and_time
 
 words_and_time = generate_word_pair()
+
+checker = spellchecker.SpellChecker()
 
 def levenshtein_distance(token1, token2):
     # https://blog.paperspace.com/measuring-text-similarity-using-levenshtein-distance/
@@ -62,10 +64,13 @@ except KeyError:
     app.secret_key = 'BAD_SECRET_KEY_DEV_ONLY'
 
 def check_word(word, prev_word):
-    checker = spellchecker.SpellChecker()
+    words = [x.strip() for x in word.split(' ') if x]
+    spellcheck_answers = [len(checker.unknown([x])) == 0 for x in words]
+    word_list_answers = [x in word_list for x in words]
+    complete_answers = [spellcheck_answers[i] or word_list_answers[i] for i in range(len(words))]
     return {
-        'word': str(len(checker.unknown(word.split(' '))) == 0),
-        'distance': str(levenshtein_distance(word, prev_word) <= 1)
+        'word': all(complete_answers),
+        'distance': bool(levenshtein_distance(word, prev_word) <= 1)
     }
 
 

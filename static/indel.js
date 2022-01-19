@@ -80,19 +80,19 @@ async function check_word(word, prev_word) {
 
 function errorMessage(answerObject){
     messageText = []
-    if (answerObject.word === 'False') {
+    if (!answerObject.word) {
         messageText.push('Not a word');
     }
 
-    if (answerObject.word === 'False' && answerObject.distance === 'False') {
+    if (!answerObject.word && !answerObject.distance) {
         messageText.push(' and t');
-    } else if (answerObject.word === 'True') {
+    } else if (answerObject.word) {
         messageText.push('T');
     } else {
         messageText.push('.');
     }
 
-    if (answerObject.distance === 'False') {
+    if (!answerObject.distance) {
         messageText.push('oo many changes.');
     }
 
