@@ -54,7 +54,7 @@ async function check_word(word, prev_word) {
     });
 
     response.json().then((value) => {
-        if (value.word === 'True' && value.distance === 'True') {
+        if (value.word && value.distance) {
             vm.previousWords.push(word);
             $('#previous-guesses').animate(
                 {scrollTop: $('#previous-guesses')[0].scrollHeight}, 'slow'
