@@ -3,3 +3,7 @@ html {
     background-color: #121212;
     color: #CFCE97;
 }
+
+.keyboard-key {
+    border-color: #CFCe97;
+}
