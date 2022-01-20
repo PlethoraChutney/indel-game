@@ -162,10 +162,6 @@ function puzzleComplete() {
             .removeClass('hidden');
     }, 2500)
 
-    if (vm.previousWords.length - 1 < vm.solvedIn) {
-        
-    }
-
     window.setTimeout(newWinner, 2500);
 }
 
@@ -195,6 +191,30 @@ async function newWinner() {
                 vm.solvedIn = vm.previousWords.length - 1;
             } else {
                 window.alert('Ah...but you cheated...');
+            }
+        });
+    } else if (vm.previousWords.length - 1 === vm.solvedIn) {
+        const response = await fetch(indel_url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify({
+                "action": "validate_new_winner",
+                "path": vm.previousWords
+            })
+        });
+    
+        response.json().then((value) => {
+            if (value.player == 'good') {
+                vm.otherPlayers += 1;
+            } else {
+                window.alert('Ah...you tied, but you cheated...');
             }
         });
     }
@@ -245,6 +265,9 @@ $(document).keydown(function(e) {
     }
 });
 
+
+// Vue app
+
 const IndelApp = {
     data() {
         return {
@@ -252,7 +275,21 @@ const IndelApp = {
             previousWords: [],
             targetWord: '',
             solvedBy: '',
-            solvedIn: ''
+            solvedIn: '',
+            otherPlayers: 0
+        }
+    },
+    computed: {
+        andOthers() {
+            if (this.otherPlayers > 0) {
+                to_return = ` and ${this.otherPlayers} other`;
+                if (this.otherPlayers > 1) {
+                    to_return = to_return + 's';
+                }
+                return to_return;
+            } else {
+                return '';
+            }
         }
     },
     compilerOptions: {
@@ -281,6 +318,7 @@ async function setup() {
         vm.targetWord = value.target_word.toLocaleUpperCase();
         vm.solvedIn = value.current_best;
         vm.solvedBy = value.current_best_player;
+        vm.otherPlayers = value.other_players;
     });
 }
 

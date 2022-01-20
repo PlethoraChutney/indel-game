@@ -50,7 +50,8 @@ def generate_word_pair():
         prev_words[-1],
         datetime.now().day,
         len(prev_words) - 1,
-        'INDEL'
+        'INDEL',
+        0
     ]
 
     return word_path_info
@@ -82,7 +83,7 @@ print(word_path_info)
 def index():
     if request.method == 'GET':
         if datetime.now().day != word_path_info[2]:
-            word_path_info[0:4] = generate_word_pair()
+            word_path_info[0:5] = generate_word_pair()
             print(word_path_info)
 
         return render_template('indel.html', night_theme = request.args.get('theme') == 'dark')
@@ -101,22 +102,27 @@ def index():
                     'start_word': word_path_info[0],
                     'target_word': word_path_info[1],
                     'current_best': word_path_info[3],
-                    'current_best_player': word_path_info[4]
+                    'current_best_player': word_path_info[4],
+                    'other_players': word_path_info[5]
                 }
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'validate_new_winner':
             try:
+                num_words = len(req_json['path'])
                 assert req_json['path'][0].lower() == word_path_info[0]
                 assert req_json['path'][-1].lower() == word_path_info[1]
-                for i in range(1, len(req_json['path'])):
+                for i in range(1, num_words):
                     last_word = req_json['path'][i - 1]
                     word = req_json['path'][i]
                     dist = Levenshtein.distance(last_word, word)
-                    print(last_word, word, dist)
                     assert dist <= 1
 
-                word_path_info[3] = len(req_json['path']) - 1
-                word_path_info[4] = req_json['player']
+                if num_words - 1 == word_path_info[3]:
+                    word_path_info[5] = word_path_info[5] + 1
+                elif num_words - 1 < word_path_info[3]:
+                    word_path_info[3] = len(req_json['path']) - 1
+                    word_path_info[4] = req_json['player']
+                    word_path_info[5] = 0
                 return json.dumps({'player': 'good'}), 200, {'ContentType': 'application/json'}
             except AssertionError:
                 return json.dumps({'player': 'cheater'}), 200, {'ContentType': 'application/json'}
