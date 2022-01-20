@@ -49,7 +49,8 @@ def generate_word_pair():
         starting_word,
         prev_words[-1],
         datetime.now().day,
-        len(prev_words) - 1
+        len(prev_words) - 1,
+        'INDEL'
     ]
 
     return word_path_info
@@ -81,7 +82,7 @@ print(word_path_info)
 def index():
     if request.method == 'GET':
         if datetime.now().day != word_path_info[2]:
-            word_path_info[0:3] = generate_word_pair()
+            word_path_info[0:4] = generate_word_pair()
             print(word_path_info)
 
         return render_template('indel.html', night_theme = request.args.get('theme') == 'dark')
@@ -99,6 +100,20 @@ def index():
                 {
                     'start_word': word_path_info[0],
                     'target_word': word_path_info[1],
-                    'current_best': word_path_info[3]
+                    'current_best': word_path_info[3],
+                    'current_best_player': word_path_info[4]
                 }
             ), 200, {'ContentType': 'application/json'}
+        elif req_json['action'] == 'validate_new_winner':
+            try:
+                assert req_json['path'][0] == word_path_info[0]
+                assert req_json['path'][-1] == word_path_info[1]
+                for i in range(1, len(req_json['path'])):
+                    assert Levenshtein.distance(req_json['path'][i - 1], req_json['path'][i]) <= 1
+
+                word_path_info[3] = len(req_json['path'])
+                word_path_info[4] = req_json['player']
+                return 200
+            except AssertionError:
+                return json.dumps({'player': 'cheater'}), 200, 'application/json'
+

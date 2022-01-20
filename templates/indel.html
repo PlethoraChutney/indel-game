@@ -49,14 +49,8 @@
                 <span class="mutation">Mutation</span>: BELT &rarr; BEET
             </p>
             <p>
-                You may also split or combine words for free by adding or removing a space. This
-                split or combination can be combined with a mutation.
-            </p>
-            <p class="example">
-                Split and <span class="insertion">insert</span>: MELON &rarr; <span class="big-space">ME LONG</span>
-            </p>
-            <p class="example">
-                Combine and <span class="mutation">mutate</span>: <span class="big-space">CAT BODE</span> &rarr; CATHODE
+                Spaces used to be allowed, but the word choice algorithm now guarantees a possible
+                solution. All answers must now be one word.
             </p>
             <p>
                 Feel free to try words and make mistakes. Backspace can be used to undo
@@ -76,6 +70,7 @@
                 </div>
                 <hr style="width: 400px;">
                 <h1 id="target-word"> [[targetWord]] </h1>
+                <p id="solved-by">[[solvedBy]]</p>
                 <h1 id="num-guesses" class="winner hidden">in [[previousWords.length - 1]] steps</h1>
                 <h3 id="emoji-chain" class="hidden"></h3>
             </div>

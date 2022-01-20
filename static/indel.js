@@ -29,6 +29,19 @@ $('.keyboard-key').click(function() {
 });
 
 async function check_word(word, prev_word) {
+    if (word.includes('')) {
+        
+        $('#current-word')
+            .addClass('bad-guess');
+        window.setTimeout(() => {
+            $('#current-word')
+                .removeClass('bad-guess');
+        }, 500);
+        errorModal('Spaces no longer allowed.');
+        return false;
+        
+    }
+
     const response = await fetch(indel_url, {
         method: 'POST',
         mode: 'cors',
@@ -89,24 +102,24 @@ function wordError(answerObject){
         messageText.push('oo many changes.');
     }
 
-    errorModal(messageText);
+    errorModal(messageText.join(''));
 }
 
-function errorModal(messageText) {
+function errorModal(messageText, timeout = 1000) {
     $('#error-modal-content')
-        .text(messageText.join(''))
+        .text(messageText)
         .addClass('visible');
 
     window.setTimeout(() => {
         $('#error-modal-content')
             .removeClass('visible');
-    }, 1000);
+    }, timeout);
     
     $('#error-modal').removeClass('hidden');
 
     window.setTimeout(() => {
         $('#error-modal').addClass('hidden');
-    }, 1000);
+    }, timeout);
 }
 
 function makeEmojiChain(wordList) {
@@ -200,7 +213,8 @@ const IndelApp = {
         return {
             currentWord: [],
             previousWords: [],
-            targetWord: ''
+            targetWord: '',
+            solvedBy: ''
         }
     },
     compilerOptions: {
@@ -227,6 +241,7 @@ async function setup() {
     response.json().then((value) => {
         vm.previousWords.push(value.start_word.toLocaleUpperCase());
         vm.targetWord = value.target_word.toLocaleUpperCase();
+        vm.solvedBy = `solved in ${value.current_best} by ${value.current_best_player}`;
     });
 }
 
