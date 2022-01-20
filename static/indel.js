@@ -4,15 +4,13 @@ let keyboardLock = false;
 // create keyboard
 
 const keyboardDiv = document.getElementById('keyboard');
-for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>', ' ']) {
+for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>']) {
     const newRow = document.createElement('div')
     for (let char of row) {
         if (char === '<') {
             char = 'Enter';
         } else if (char === '>') {
             char = 'Del';
-        } else if (char === ' ') {
-            char = 'Space';
         }
         const newKey = document.createElement('div');
         newKey.setAttribute('id', 'key-' + char);
@@ -26,11 +24,6 @@ for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>', ' ']) {
 };
 
 $('.keyboard-key').click(function() {
-    var keyPressed = $(this).text();
-    read_key(keyPressed);
-});
-
-$('.keyboard-key').on('tap', function() {
     var keyPressed = $(this).text();
     read_key(keyPressed);
 });
@@ -73,12 +66,12 @@ async function check_word(word, prev_word) {
                     .removeClass('bad-guess');
             }, 500);
 
-            errorMessage(value);
+            wordError(value);
         }
     });
 }
 
-function errorMessage(answerObject){
+function wordError(answerObject){
     messageText = []
     if (!answerObject.word) {
         messageText.push('Not a word');
@@ -96,6 +89,10 @@ function errorMessage(answerObject){
         messageText.push('oo many changes.');
     }
 
+    errorModal(messageText);
+}
+
+function errorModal(messageText) {
     $('#error-modal-content')
         .text(messageText.join(''))
         .addClass('visible');

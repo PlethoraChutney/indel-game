@@ -15,7 +15,7 @@ with open('words.json', 'r') as f:
 
 def generate_word_pair():
     i = 0
-    iter_range = [10, 31]
+    iter_range = [10, 16]
     while True:
         try:
             starting_word = random.choice(word_list)
@@ -40,7 +40,7 @@ def generate_word_pair():
         except ValueError:
             i += 1
             if i == 10:
-                iter_range = [5,15]
+                iter_range = [5, 11]
             continue
 
     print(prev_words)
@@ -68,7 +68,7 @@ except KeyError:
 
 def check_word(word, prev_word):
     spellcheck_answers = len(checker.unknown([word])) == 0
-    word_list_answers = word in word_list
+    word_list_answers = word.lower() in word_list
     return {
         'word': spellcheck_answers or word_list_answers,
         'distance': bool(Levenshtein.distance(word, prev_word) <= 1)
@@ -96,5 +96,9 @@ def index():
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'setup':
             return json.dumps(
-                {'start_word': word_path_info[0], 'target_word': word_path_info[1]}
+                {
+                    'start_word': word_path_info[0],
+                    'target_word': word_path_info[1],
+                    'current_best': word_path_info[3]
+                }
             ), 200, {'ContentType': 'application/json'}
