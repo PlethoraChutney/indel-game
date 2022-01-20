@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import os
 import spellchecker
 import logging
@@ -85,6 +85,14 @@ def index():
         if datetime.now().day != word_path_info[2]:
             word_path_info[0:5] = generate_word_pair()
             print(word_path_info)
+            
+        try:
+            if session['starting_word'] != word_path_info[0]:
+                session['starting_word'] = word_path_info[0]
+                session['your_best'] = 100000
+        except KeyError:
+            session['starting_word'] = word_path_info[0]
+            session['your_best'] = 100000
 
         return render_template('indel.html', night_theme = request.args.get('theme') == 'dark')
 
@@ -96,6 +104,7 @@ def index():
             return json.dumps(
                 check_word(req_json['word'], req_json['prev_word'])
             ), 200, {'ContentType': 'application/json'}
+
         elif req_json['action'] == 'setup':
             return json.dumps(
                 {
@@ -106,6 +115,7 @@ def index():
                     'other_players': word_path_info[5]
                 }
             ), 200, {'ContentType': 'application/json'}
+
         elif req_json['action'] == 'validate_new_winner':
             try:
                 num_words = len(req_json['path'])
@@ -117,13 +127,21 @@ def index():
                     dist = Levenshtein.distance(last_word, word)
                     assert dist <= 1
 
-                if num_words - 1 == word_path_info[3]:
+                prev_best = session.get('your_best')
+                if prev_best is None:
+                    prev_best = np.inf
+
+                if num_words - 1 == word_path_info[3] and prev_best > (num_words - 1):
                     word_path_info[5] = word_path_info[5] + 1
+                    session['your_best'] = num_words - 1
+                    tied = 1
                 elif num_words - 1 < word_path_info[3]:
                     word_path_info[3] = len(req_json['path']) - 1
                     word_path_info[4] = req_json['player']
                     word_path_info[5] = 0
-                return json.dumps({'player': 'good'}), 200, {'ContentType': 'application/json'}
+                    session['your_best'] = num_words - 1
+                    tied = 0
+                return json.dumps({'player': 'good', 'tied': tied}), 200, {'ContentType': 'application/json'}
             except AssertionError:
                 return json.dumps({'player': 'cheater'}), 200, {'ContentType': 'application/json'}
 

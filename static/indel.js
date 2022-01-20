@@ -189,6 +189,7 @@ async function newWinner() {
             if (value.player == 'good') {
                 vm.solvedBy = playerName;
                 vm.solvedIn = vm.previousWords.length - 1;
+                vm.otherPlayers = 0;
             } else {
                 window.alert('Ah...but you cheated...');
             }
@@ -212,7 +213,7 @@ async function newWinner() {
     
         response.json().then((value) => {
             if (value.player == 'good') {
-                vm.otherPlayers += 1;
+                vm.otherPlayers += value.tied;
             } else {
                 window.alert('Ah...you tied, but you cheated...');
             }

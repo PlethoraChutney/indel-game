@@ -92,7 +92,7 @@ body {
     font-style: normal;
 }
 
-#previous-guesses h1:first-of-type {
+#previous-guesses > h1:first-of-type {
     font-style: italic;
 }
 
