@@ -14,32 +14,47 @@ with open('words.json', 'r') as f:
 
 
 def generate_word_pair():
+    i = 0
+    iter_range = [10, 31]
     while True:
         try:
             starting_word = random.choice(word_list)
             prev_words = [starting_word]
-            for _ in range(random.randrange(15, 21)):
-                print('Iterating...')
+
+            for _ in range(random.randrange(*iter_range)):
                 word_len = len(prev_words[-1])
                 working_list = [x for x in word_list if any([len(x) == word_len-1, len(x) == word_len, len(x) == word_len + 1])]
-                good_list = [x for x in working_list if Levenshtein.distance(x, prev_words[-1]) == 1 and x not in prev_words]
-                print(good_list)
-                prev_words.append(
-                    random.choice(good_list)
-                )
+                good_list = [(x, sum([Levenshtein.distance(x, y) for y in prev_words])) for x in working_list if Levenshtein.distance(x, prev_words[-1]) == 1 and x not in prev_words]
+                
+                # keep only the words with the most cumulative distance from all previous words
+                # to try to maximize our travel in word space
+                most_cumulative_distance = max([x[1] for x in good_list])
+                good_list = [x for x in good_list if x[1] == most_cumulative_distance]
+                pick = random.choice(good_list)
+                prev_words.append(pick[0])
+                if pick[1] > 50:
+                    break
+                
+
             break
-        except IndexError:
+        except ValueError:
+            i += 1
+            if i == 10:
+                iter_range = [5,15]
             continue
 
-    words_and_time = [
+    print(prev_words)
+
+    word_path_info = [
         starting_word,
         prev_words[-1],
-        datetime.now().day
+        datetime.now().day,
+        len(prev_words) - 1
     ]
 
-    return words_and_time, prev_words
+    return word_path_info
 
-words_and_time, word_path = generate_word_pair()
+word_path_info = generate_word_pair()
 
 checker = spellchecker.SpellChecker()
 
@@ -60,11 +75,14 @@ def check_word(word, prev_word):
     }
 
 
+print(word_path_info)
+
 @app.route('/', methods = ['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        if datetime.now().day != words_and_time[2]:
-            words_and_time[0:2], path = generate_word_pair()
+        if datetime.now().day != word_path_info[2]:
+            word_path_info[0:3] = generate_word_pair()
+            print(word_path_info)
 
         return render_template('indel.html', night_theme = request.args.get('theme') == 'dark')
 
@@ -78,5 +96,5 @@ def index():
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'setup':
             return json.dumps(
-                {'start_word': words_and_time[0], 'target_word': words_and_time[1]}
+                {'start_word': word_path_info[0], 'target_word': word_path_info[1]}
             ), 200, {'ContentType': 'application/json'}
