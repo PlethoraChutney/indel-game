@@ -106,6 +106,12 @@ h1 {
     word-spacing: 1rem;
 }
 
+h1.empty {
+    font-size: 24pt;
+    opacity: 0.5;
+    font-style: italic;
+}
+
 #target-word {
     margin-bottom: 0;
 }

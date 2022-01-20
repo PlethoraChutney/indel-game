@@ -291,7 +291,18 @@ const IndelApp = {
             } else {
                 return '';
             }
-        }
+        },
+        currWordEmpty() {
+            return this.currentWord.length === 0;
+        },
+        currWordGuess() {
+            if (this.currWordEmpty) {
+                return `Guess ${this.previousWords.length}`;
+            } else {
+                return this.currentWord.join('') + '|';
+            }
+        },
+
     },
     compilerOptions: {
         delimiters: ['[[', ']]']
