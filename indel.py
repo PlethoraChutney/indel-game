@@ -106,14 +106,18 @@ def index():
             ), 200, {'ContentType': 'application/json'}
         elif req_json['action'] == 'validate_new_winner':
             try:
-                assert req_json['path'][0] == word_path_info[0]
-                assert req_json['path'][-1] == word_path_info[1]
+                assert req_json['path'][0].lower() == word_path_info[0]
+                assert req_json['path'][-1].lower() == word_path_info[1]
                 for i in range(1, len(req_json['path'])):
-                    assert Levenshtein.distance(req_json['path'][i - 1], req_json['path'][i]) <= 1
+                    last_word = req_json['path'][i - 1]
+                    word = req_json['path'][i]
+                    dist = Levenshtein.distance(last_word, word)
+                    print(last_word, word, dist)
+                    assert dist <= 1
 
-                word_path_info[3] = len(req_json['path'])
+                word_path_info[3] = len(req_json['path']) - 1
                 word_path_info[4] = req_json['player']
-                return 200
+                return json.dumps({'player': 'good'}), 200, {'ContentType': 'application/json'}
             except AssertionError:
-                return json.dumps({'player': 'cheater'}), 200, 'application/json'
+                return json.dumps({'player': 'cheater'}), 200, {'ContentType': 'application/json'}
 

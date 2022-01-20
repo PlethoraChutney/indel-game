@@ -29,7 +29,7 @@ $('.keyboard-key').click(function() {
 });
 
 async function check_word(word, prev_word) {
-    if (word.includes('')) {
+    if (word.includes(' ')) {
         
         $('#current-word')
             .addClass('bad-guess');
@@ -39,7 +39,7 @@ async function check_word(word, prev_word) {
         }, 500);
         errorModal('Spaces no longer allowed.');
         return false;
-        
+
     }
 
     const response = await fetch(indel_url, {
@@ -161,6 +161,43 @@ function puzzleComplete() {
             .text(vm.previousWords[0] + ' → ' + emojiInterior + ' → ' + vm.previousWords[vm.previousWords.length -1])
             .removeClass('hidden');
     }, 2500)
+
+    if (vm.previousWords.length - 1 < vm.solvedIn) {
+        
+    }
+
+    window.setTimeout(newWinner, 2500);
+}
+
+async function newWinner() {
+    if (vm.previousWords.length - 1 < vm.solvedIn) {
+        playerName = window.prompt('You beat the previous best! What\'s your name?');
+        const response = await fetch(indel_url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify({
+                "action": "validate_new_winner",
+                "path": vm.previousWords,
+                "player": playerName
+            })
+        });
+    
+        response.json().then((value) => {
+            if (value.player == 'good') {
+                vm.solvedBy = playerName;
+                vm.solvedIn = vm.previousWords.length - 1;
+            } else {
+                window.alert('Ah...but you cheated...');
+            }
+        });
+    }
 }
 
 function handleDelete() {
@@ -214,7 +251,8 @@ const IndelApp = {
             currentWord: [],
             previousWords: [],
             targetWord: '',
-            solvedBy: ''
+            solvedBy: '',
+            solvedIn: ''
         }
     },
     compilerOptions: {
@@ -241,7 +279,8 @@ async function setup() {
     response.json().then((value) => {
         vm.previousWords.push(value.start_word.toLocaleUpperCase());
         vm.targetWord = value.target_word.toLocaleUpperCase();
-        vm.solvedBy = `solved in ${value.current_best} by ${value.current_best_player}`;
+        vm.solvedIn = value.current_best;
+        vm.solvedBy = value.current_best_player;
     });
 }
 
