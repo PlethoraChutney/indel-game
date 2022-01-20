@@ -79,6 +79,8 @@ body {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
 }
 
 #previous-guesses, #indel-app {
