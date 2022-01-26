@@ -160,6 +160,8 @@ function puzzleComplete() {
         $('#emoji-chain')
             .text(vm.previousWords[0] + ' → ' + emojiInterior + ' → ' + vm.previousWords[vm.previousWords.length -1])
             .removeClass('hidden');
+
+        vm.hasSolved = true;
     }, 2500)
 
     window.setTimeout(newWinner, 2500);
@@ -277,7 +279,8 @@ const IndelApp = {
             targetWord: '',
             solvedBy: '',
             solvedIn: '',
-            otherPlayers: 0
+            otherPlayers: 0,
+            hasSolved: false
         }
     },
     computed: {
@@ -331,6 +334,7 @@ async function setup() {
         vm.solvedIn = value.current_best;
         vm.solvedBy = value.current_best_player;
         vm.otherPlayers = value.other_players;
+        vm.hasSolved = value.has_solved;
     });
 }
 

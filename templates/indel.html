@@ -70,7 +70,7 @@
                 </div>
                 <hr style="width: 400px;">
                 <h1 id="target-word"> [[targetWord]] </h1>
-                <p id="solved-by">solved in [[solvedIn]] by [[solvedBy]][[andOthers]]</p>
+                <p id="solved-by" v-if="hasSolved">solved in [[solvedIn]] by [[solvedBy]][[andOthers]]</p>
                 <h1 id="num-guesses" class="winner hidden">in [[previousWords.length - 1]] steps</h1>
                 <h3 id="emoji-chain" class="hidden"></h3>
             </div>
@@ -80,6 +80,6 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <!-- <script src="https://unpkg.com/vue@next"></script> -->
-<script src="https://unpkg.com/vue@v3.2.27"></script>
+<script src="{{url_for('static', filename = 'vue.global.prod.js')}}"></script>
 <script src="{{url_for('static', filename = 'indel.js')}}"></script>
 </html>

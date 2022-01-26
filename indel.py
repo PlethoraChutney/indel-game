@@ -71,28 +71,37 @@ except KeyError:
 def check_word(word, prev_word):
     spellcheck_answers = len(checker.unknown([word])) == 0
     word_list_answers = word.lower() in word_list
+
+    if spellcheck_answers and not word_list_answers:
+        word_list.append(word)
+
     return {
         'word': spellcheck_answers or word_list_answers,
         'distance': bool(Levenshtein.distance(word, prev_word) <= 1)
     }
 
 
-print(word_path_info)
+app.logger.info(word_path_info)
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
     if request.method == 'GET':
         if datetime.now().day != word_path_info[2]:
+            with open('words.json', 'w') as f:
+                app.logger.info('Dumping word list')
+                json.dump(word_list, f)
             word_path_info[0:5] = generate_word_pair()
-            print(word_path_info)
+            app.logger.info(word_path_info)
             
         try:
             if session['starting_word'] != word_path_info[0]:
                 session['starting_word'] = word_path_info[0]
-                session['your_best'] = 100000
+                if 'your_best' in session:
+                    del session['your_best']
         except KeyError:
             session['starting_word'] = word_path_info[0]
-            session['your_best'] = 100000
+            if 'your_best' in session:
+                del session['your_best']
 
         return render_template('indel.html', night_theme = request.args.get('theme') == 'dark')
 
@@ -112,7 +121,8 @@ def index():
                     'target_word': word_path_info[1],
                     'current_best': word_path_info[3],
                     'current_best_player': word_path_info[4],
-                    'other_players': word_path_info[5]
+                    'other_players': word_path_info[5],
+                    'has_solved': 'your_best' in session
                 }
             ), 200, {'ContentType': 'application/json'}
 
@@ -131,7 +141,7 @@ def index():
                 if prev_best is None:
                     prev_best = np.inf
 
-                if num_words - 1 == word_path_info[3] and prev_best > (num_words - 1):
+                if num_words - 1 >= word_path_info[3] and prev_best > (num_words - 1):
                     word_path_info[5] = word_path_info[5] + 1
                     session['your_best'] = num_words - 1
                     tied = 1
