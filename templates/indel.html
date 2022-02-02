@@ -49,10 +49,6 @@
                 <span class="mutation">Mutation</span>: BELT &rarr; BEET
             </p>
             <p>
-                Spaces used to be allowed, but the word choice algorithm now guarantees a possible
-                solution. All answers must now be one word.
-            </p>
-            <p>
                 Feel free to try words and make mistakes. Backspace can be used to undo
                 prior guesses without penalty.
             </p>
@@ -73,13 +69,38 @@
                 <p id="solved-by" v-if="hasSolved">solved in [[solvedIn]] by [[solvedBy]][[andOthers]]</p>
                 <h1 id="num-guesses" class="winner hidden">in [[previousWords.length - 1]] steps</h1>
                 <h3 id="emoji-chain" class="hidden"></h3>
+                <div id="keyboard">
+                    <div>
+                        <keyboard-key
+                            v-for="letter of Object.values(keyboardKeys).slice(0,10)"
+                            v-bind:key="letter.id"
+                            v-bind:key-letter="letter.keyLetter"
+                            @key-clicked="read_key(letter.keyLetter)"
+                        ></keyboard-key>
+                    </div>
+                    <div>
+                        <keyboard-key
+                            v-for="letter of Object.values(keyboardKeys).slice(10,19)"
+                            v-bind:key="letter.id"
+                            v-bind:key-letter="letter.keyLetter"
+                            @key-clicked="read_key(letter.keyLetter)"
+                        ></keyboard-key>
+                    </div>
+                    <div>
+                        <keyboard-key
+                            v-for="letter of Object.values(keyboardKeys).slice(19, 28)"
+                            v-bind:key="letter.id"
+                            v-bind:key-letter="letter.keyLetter"
+                            @key-clicked="read_key(letter.keyLetter)"
+                        ></keyboard-key>
+                    </div>
+                </div>
             </div>
-            <div id="keyboard"></div>
         </div>
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<!-- <script src="https://unpkg.com/vue@next"></script> -->
-<script src="{{url_for('static', filename = 'vue.global.prod.js')}}"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<!-- <script src="{{url_for('static', filename = 'vue.global.prod.js')}}"></script> -->
 <script src="{{url_for('static', filename = 'indel.js')}}"></script>
 </html>

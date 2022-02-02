@@ -1,33 +1,6 @@
 const indel_url = '/';
 let keyboardLock = false;
 
-// create keyboard
-
-const keyboardDiv = document.getElementById('keyboard');
-for (const row of ['QWERTYUIOP', 'ASDFGHJKL', '<ZXCVBNM>']) {
-    const newRow = document.createElement('div')
-    for (let char of row) {
-        if (char === '<') {
-            char = 'Enter';
-        } else if (char === '>') {
-            char = 'Del';
-        }
-        const newKey = document.createElement('div');
-        newKey.setAttribute('id', 'key-' + char);
-        newKey.classList.add('keyboard-key');
-
-        const letterNode = document.createTextNode(char);
-        newKey.appendChild(letterNode);
-        newRow.appendChild(newKey);
-    }
-    keyboardDiv.appendChild(newRow);
-};
-
-$('.keyboard-key').click(function() {
-    var keyPressed = $(this).text();
-    read_key(keyPressed);
-});
-
 async function check_word(word, prev_word) {
     if (word.includes(' ')) {
         
@@ -231,36 +204,15 @@ function handleDelete() {
     }
 }
 
-function read_key(keypress) {
-    if (keyboardLock) {
-        return true;
-    }
-
-    if (keypress === 'Space') {
-        keypress = ' ';
-    }
-
-    if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
-        handleDelete();
-    } else if (keypress.toUpperCase() === 'ENTER') {
-        word = vm.$data.currentWord.join('');
-        prev_words = vm.$data.previousWords;
-        prev_word = prev_words[prev_words.length - 1];
-        check_word(word, prev_word);
-    } else {
-        vm.$data.currentWord.push(keypress.toUpperCase());
-    }
-};
-
 $(document).keydown(function(e) {
     // prevent backspace navigation
     if (e.keyCode == 8) {
         e.preventDefault();
-        read_key('backspace');
+        vm.read_key('backspace');
     } else if (e.keyCode == 13) {
-        read_key('enter');
+        vm.read_key('enter');
     } else if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 32) {
-        read_key(String.fromCharCode(e.which));
+        vm.read_key(String.fromCharCode(e.which));
     } else if (e.keyCode === 27) {
         $('#help-modal').addClass('hidden');
     } else {
@@ -271,9 +223,19 @@ $(document).keydown(function(e) {
 
 // Vue app
 
+const KeyboardKey = {
+    props: ['keyLetter'],
+    template: `
+        <div
+            class="keyboard-key"
+            @click="$emit('keyClicked')"
+        >{{ keyLetter }}</div>`
+}
+
 const IndelApp = {
     data() {
         return {
+            'keyboardKeys': {},
             currentWord: [],
             previousWords: [],
             targetWord: '',
@@ -283,6 +245,7 @@ const IndelApp = {
             hasSolved: false
         }
     },
+    components: {KeyboardKey},
     computed: {
         andOthers() {
             if (this.otherPlayers > 0) {
@@ -306,6 +269,28 @@ const IndelApp = {
             }
         },
 
+    },
+    methods: {
+        read_key(keypress) {
+            if (keyboardLock) {
+                return true;
+            }
+        
+            if (keypress === 'Space') {
+                keypress = ' ';
+            }
+        
+            if (keypress.toUpperCase() === 'BACKSPACE' || keypress.toUpperCase() === 'DEL') {
+                handleDelete();
+            } else if (keypress.toUpperCase() === 'ENTER') {
+                word = vm.$data.currentWord.join('');
+                prev_words = vm.$data.previousWords;
+                prev_word = prev_words[prev_words.length - 1];
+                check_word(word, prev_word);
+            } else {
+                vm.$data.currentWord.push(keypress.toUpperCase());
+            }
+        }
     },
     compilerOptions: {
         delimiters: ['[[', ']]']
@@ -341,6 +326,36 @@ async function setup() {
 setup();
 
 const vm = Vue.createApp(IndelApp).mount('#indel-app');
+
+// set up keyboard
+for (let i = 0; i <= 18; i++) {
+    let char = 'QWERTYUIOPASDFGHJKL'.charAt(i);
+    vm.$data.keyboardKeys[char] = {
+        id: char,
+        keyLetter: char
+    }
+};
+
+vm.$data.keyboardKeys['Enter'] = {
+    id: 'Enter',
+    keyLetter: 'Enter'
+};
+
+for (let i = 0; i <= 8; i++) {
+    let char = 'ZXCVBNM'.charAt(i);
+    vm.$data.keyboardKeys[char] = {
+        id: char,
+        keyLetter: char
+    }
+};
+
+vm.$data.keyboardKeys['Del'] = {
+    id: 'Del',
+    keyLetter: 'Del'
+};
+
+// Not sure where this blank element comes from but this is easier than finding out
+delete vm.$data.keyboardKeys['']
 
 // Help modal
 $('#help-launcher').click(() => {
